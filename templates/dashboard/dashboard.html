@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Quản Lý</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #ecf0f1;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #2c3e50;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 20px;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #ecf0f1;
+    }
+
+    .sidebar a {
+      padding: 15px 25px;
+      text-decoration: none;
+      color: #ecf0f1;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #34495e;
+    }
+
+    .sidebar a.active {
+      background-color: #3498db;
+      color: #fff;
+    }
+
+    .main {
+      flex-grow: 1;
+      padding: 20px;
+    }
+
+    .main h1 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    .content-box {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      min-height: 400px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+    #menu-content div > div {
+      min-width: 200px;
+    }
+    #menu-content p {
+      margin: 4px 0;
+    } 
+    /* Popup form cho đơn hàng */
+    .popup-form {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      z-index: 1000;
+      min-width: 320px;
+      max-width: 90%;
+    }
+
+    .popup-form h4 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 20px;
+      color: #2c3e50;
+      text-align: center;
+    }
+
+    .popup-form label {
+      display: block;
+      margin-top: 10px;
+      font-weight: 600;
+      color: #34495e;
+    }
+
+    .popup-form input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    .popup-form .popup-buttons {
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    .popup-form button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+
+    .popup-form .save-btn {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .popup-form .cancel-btn {
+      background-color: #e74c3c;
+      color: white;
+    }
+    .popup-form select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 14px;
+      background-color: white;
+      appearance: none; /* ẩn mũi tên mặc định ở Chrome/Safari */
+    }
+    .drink-selector {
+      margin-top: 6px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    table select.status_selected {
+      width: 100%;
+      padding: 6px 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+      color: #2c3e50;
+      appearance: none;         /* Ẩn mũi tên mặc định (tuỳ trình duyệt) */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 12px;
+    }
+    .status_selected {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      min-width: 140px;
+      color: white;
+      font-weight: bold;
+    }
+    .status_selected.finish {
+      background-color: #27ae60; /* xanh lá */
+    }
+    .status_selected.on-job {
+      background-color: #f1c40f; /* vàng */
+      color: black;
+    }
+    .status_selected.cancel {
+      background-color: #e74c3c; /* đỏ */
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>Quản Lý</h2>
+    <a id="menu-tab" href="#" class="active" onclick="changeTab('menu')">Menu</a>
+    <a id="orders-tab" href="#">Đơn hàng</a>
+    <a id="revenue-tab" href="#" onclick="changeTab('revenue')">Doanh thu</a>
+  </div>
+
+  <div class="main">
+    <h1>Trang chính</h1>
+    <div class="content-box">
+      
+      <!-- Menu -->
+      <div id="menu-content" class="tab-content active">
+        <h3>Menu Đồ Uống</h3>
+
+        <div style="display: flex; gap: 60px; flex-wrap: wrap;">
+          <div class="menu-item">
+            <p class="item-name"><strong>Trà đào</strong></p>
+            <p class="item-price">25.000đ</p>
+          </div>
+
+          <div class="menu-item">
+            <p class="item-name"><strong>Cà phê sữa</strong></p>
+            <p class="item-price">20.000đ</p>
+          </div>
+
+          <div class="menu-item">
+            <p class="item-name"><strong>Trà sữa trân châu</strong></p>
+            <p class="item-price">30.000đ</p>
+          </div>
+
+          <div class="menu-item">
+            <p class="item-name"><strong>Latte đá</strong></p>
+            <p class="item-price">28.000đ</p>
+          </div>
+
+          <div class="menu-item">
+            <p class="item-name"><strong>Sinh tố bơ</strong></p>
+            <p class="item-price">32.000đ</p>
+          </div>
+
+          <div class="menu-item">
+            <p class="item-name"><strong>Nước cam ép</strong></p>
+            <p class="item-price">27.000đ</p>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- Đơn hàng -->
+      <div id="orders-content" class="tab-content">
+        <h3>Đơn hàng</h3>
+
+        <!-- Các nút thao tác -->
+        <div style="margin-bottom: 10px;">
+          <button onclick="openOrderForm()">➕ Thêm</button>
+          <button onclick="alert('Sửa đơn hàng')">✏️ Sửa</button>
+          <button onclick="alert('Xóa đơn hàng')">🗑️ Xóa</button>
+        </div>
+
+        <table border="1" width="100%" cellspacing="0" cellpadding="8">
+          <thead style="background-color: #27ae60; color: white;">
+            <tr>
+              <th>Chọn</th>
+              <th>Mã đơn</th>
+              <th>Ngày đặt</th>
+              <th>Chọn món</th>
+              <th>Khách hàng</th>
+              <th>Tổng tiền</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody id="order-table-body">
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Popup Thêm đơn hàng -->
+        <div id="order-form-popup" class="popup-form">
+          <h4>Thêm đơn hàng</h4>
+
+          <label for="order-id">Mã đơn:</label>
+          <input type="text" id="order-id" />
+
+          <label for="order-date">Ngày đặt:</label>
+          <input type="date" id="order-date"/>
+
+          <label for="order-customer">Khách hàng:</label>
+          <input type="text" id="order-customer"/>
+          
+
+          <label for="order-drink">Chọn món:</label>
+
+        <!-- Chọn món động -->
+        <div id="drink-selector-area">
+          <!-- Dòng chọn món đầu tiên -->
+          <div class="drink-selector">
+            <select class="drink-select">
+              <option value="">-- Chọn món --</option>
+              <option value="Trà đào|25000">Trà đào - 25.000đ</option>
+              <option value="Cà phê sữa|20000">Cà phê sữa - 20.000đ</option>
+              <option value="Trà sữa trân châu|30000">Trà sữa trân châu - 30.000đ</option>
+              <option value="Latte đá|28000">Latte đá - 28.000đ</option>
+              <option value="Sinh tố bơ|32000">Sinh tố bơ - 32.000đ</option>
+              <option value="Nước cam ép|27000">Nước cam ép - 27.000đ</option>
+            </select>
+            <input type="number" class="drink-qty" min="1" value="1" style="width: 60px;" />
+            <button id='add-order' type="button" onclick="addDrinkRow(this)">➕</button>
+          </div>
+        </div>
+
+        <!-- Nơi hiển thị món đã chọn -->
+        <div id="selected-drinks" style="margin-top: 10px;"></div>
+
+
+          <label for="order-total">Tổng tiền:</label>
+          <input type="text" id="order-total" />
+
+          <div class="popup-buttons">
+            <button id='save-order' class="save-btn" onclick="addOrder()">Lưu</button>
+            <button class="cancel-btn" onclick="closeOrderForm()">Hủy</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Doanh thu -->
+      <div id="revenue-content" class="tab-content">
+        <h3>Doanh thu</h3>
+        <p>Thống kê doanh thu theo ngày, tháng...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/dashboard/dashboard.js"></script>
+
+</body>
+</html>
