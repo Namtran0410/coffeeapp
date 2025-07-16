@@ -1,13 +1,15 @@
 [
   {
-    "order_id": "20250715-BdxGK",
-    "order_date": "",
+    "order_id": "20250716-hKgmO",
+    "order_date": "2025-07-16",
+    "order_note": "50 đường, 50 đá",
     "order_menu": [
       {
         "order_name": "Trà đào",
-        "order_quantity": 4,
+        "order_quantity": 3,
         "price": "25000"
       }
-    ]
+    ],
+    "status": "finish"
   }
 ]

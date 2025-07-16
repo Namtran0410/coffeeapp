@@ -258,7 +258,7 @@
         <div style="margin-bottom: 10px;">
           <button onclick="openOrderForm()">➕ Thêm</button>
           <button onclick="alert('Sửa đơn hàng')">✏️ Sửa</button>
-          <button onclick="alert('Xóa đơn hàng')">🗑️ Xóa</button>
+          <button id='delete_order_button'>🗑️ Xóa</button>
         </div>
 
         <table border="1" width="100%" cellspacing="0" cellpadding="8">
@@ -268,7 +268,7 @@
               <th>Mã đơn</th>
               <th>Ngày đặt</th>
               <th>Chọn món</th>
-              <th>Khách hàng</th>
+              <th>Ghi chú</th>
               <th>Tổng tiền</th>
               <th>Trạng thái</th>
             </tr>
@@ -289,8 +289,8 @@
           <label for="order-date">Ngày đặt:</label>
           <input type="date" id="order-date"/>
 
-          <label for="order-customer">Khách hàng:</label>
-          <input type="text" id="order-customer"/>
+          <label for="order-note">Ghi chú:</label>
+          <input type="text" id="order-note"/>
           
 
           <label for="order-drink">Chọn món:</label>

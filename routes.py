@@ -1,4 +1,5 @@
 from nt import mkdir
+from turtle import pos
 from flask import Flask, jsonify, render_template, request
 import os, json
 
@@ -50,27 +51,66 @@ def loadOrderFile():
 def dashboard_navigate():
     return render_template('dashboard/dashboard.html')
 
+def editfile():
+    data_file= 'static/data/order.json'
+    with open(data_file, 'r', encoding='utf-8') as f:
+        data= json.load(f)
+    orders= []
+    status_map = {}
+    for item in data: 
+        if 'order_id' in item: 
+            orders.append(item)
+        elif 'id' in item and 'status' in item:
+            status_map[item['id']]= item['status']
+
+    for order in orders:
+        if order['order_id'] in status_map:
+            order['status']= status_map[order['order_id']]
+    
+    # Delete order id first 
+    return orders
 
 @app.route('/dashboard/orders', methods=['GET', 'POST'])
 def dashboard_order():
     data_file = 'static/data/order.json'
     post_data= request.get_json()
-
-
+    # Response order data
     order_data = loadOrderFile()
     if request.method == 'POST':
         if not isinstance(post_data, list):
             post_data = [post_data]
 
         order_data.extend(post_data)
-        final_data= []
         with open(data_file, 'w', encoding='utf-8') as f:
             json.dump(order_data, f, indent=2, ensure_ascii=False)
-        return jsonify(order_data)
+        data= editfile()
+        with open(data_file, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
 
-    return render_template('dashboard/dashboard.html', orders=order_data, active_tab='orders')
+        return jsonify(data)
+    return render_template('dashboard/dashboard.html', active_tab='orders')
 
+@app.route('/dashboard/orders/delete', methods= ['GET','POST'])
+def deleteRow():
+    data_file= 'static/data/order.json'
+    post_data= request.get_json()
 
+    if request.method == 'POST':
+        if not isinstance(post_data, list):
+            post_data = [post_data]
+    order_id_delete= []
+    for item in post_data[0]["delete_data"]:
+        order_id_delete.append(item['order_id'])
+
+    with open(data_file, 'r', encoding='utf-8' ) as f:
+        data_order= json.load(f)
+    
+    for item in data_order[:]:
+        if item["order_id"] in order_id_delete:
+            data_order.remove(item)
+    with open(data_file, 'w', encoding='utf-8') as f:
+        json.dump(data_order, f, indent=2, ensure_ascii=False)
+    return jsonify(post_data)
 
 
 

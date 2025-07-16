@@ -120,7 +120,7 @@ document.querySelectorAll('.status_selected').forEach(el=> {
 function addOrder() {
     const order_id= document.getElementById('order-id').value.trim()
     const order_date= document.getElementById('order-date').value.trim()
-    const order_customer= document.getElementById('order-customer').value.trim()
+    const order_note= document.getElementById('order-note').value.trim()
     
     // lấy order drink và chuyển thành dạng name:quantity-text và xuống dòng
     let order_drink= ''
@@ -136,7 +136,7 @@ function addOrder() {
     <td>${order_id}</td>
     <td>${order_date}</td>
     <td>${order_drink}</td>
-    <td>${order_customer}</td>
+    <td>${order_note}</td>
     <td>${order_total}</td>
     <td>
         <select class="status_selected">
@@ -156,6 +156,7 @@ function addOrder() {
 document.getElementById('save-order').addEventListener('click', async function(){
     const order_id= document.getElementById('order-id').value.trim()
     const order_date= document.getElementById('order-date').value
+    const order_note= document.getElementById('order-note').value
     const res= await fetch('/dashboard/orders',{
         method: 'POST',
         headers: {
@@ -164,6 +165,7 @@ document.getElementById('save-order').addEventListener('click', async function()
         body: JSON.stringify({
             order_id: order_id,
             order_date: order_date,
+            order_note: order_note,
             order_menu: selectedItems
         })
     }
@@ -171,7 +173,7 @@ document.getElementById('save-order').addEventListener('click', async function()
     // clear form 
     document.getElementById('order-id').value = '';
     document.getElementById('order-date').value = '';
-    document.getElementById('order-customer').value = '';
+    document.getElementById('order-note').value = '';
     document.getElementById('order-total').value = '';
     document.querySelector('.drink-select').value = '';
     document.querySelector('.drink-qty').value = 1;
@@ -210,5 +212,126 @@ document.getElementById('orders-tab').addEventListener('click', async function()
     const data = await res.json();
     console.log('[DATA từ backend]', data);
     changeTab('orders');
+
+    // flatten data
+    const flattern_data= flattenOrders(data)
+    document.getElementById('order-table-body').innerHTML = '';
+    flattern_data.forEach(item=>{
+        const order_id= item.order_id
+        const order_date= item.order_date
+        let order_drink = ''
+        item.order_menu.forEach(drink=> {
+            order_drink+= `${drink.order_name}: ${drink.order_quantity}<br>`
+        })
+        const order_note= item.order_note
+        const order_total= item.order_menu.reduce((sum, drink)=> {
+            return sum + (Number(drink.price) * Number(drink.order_quantity || 1))
+        },0)
+
+        const status = item.status || ''
+        const row= document.createElement('tr')
+        row.innerHTML= `
+        <td><input type="checkbox" /></td>
+        <td>${order_id}</td>
+        <td>${order_date}</td>
+        <td>${order_drink}</td>
+        <td>${order_note}</td>
+        <td>${order_total}</td>
+        <td>
+            <select class="status_selected">
+                <option value="" ${status === '' ? 'selected' : ''}>-- Chọn trạng thái --</option>
+                <option value="finish" ${status === 'finish' ? 'selected' : ''}>Hoàn thành</option>
+                <option value="on-job" ${status === 'on-job' ? 'selected' : ''}>Đang thực hiện</option>
+                <option value="cancel" ${status === 'cancel' ? 'selected' : ''}>Hủy</option>
+            </select>
+        </td>
+        `
+        document.getElementById('order-table-body').appendChild(row)
+
+    })
 });
 
+// Lưu chuyển đổi trạng thái 
+document.getElementById('order-table-body').addEventListener('change', async function(event) {
+    if (event.target.classList.contains('status_selected')) {
+        const tr = event.target.closest('tr');
+        const orderId = tr.children[1].innerText;
+        const status = event.target.value;
+
+        // Gửi lên backend
+        const res = await fetch('/dashboard/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify([
+                { id: orderId, status: status }
+            ])
+        });
+
+        const result = await res.json();
+        console.log('Đã cập nhật trạng thái:', result);
+    }
+});
+
+// Xóa đơn hàng
+let selected_delete = [];
+document.getElementById('order-table-body').addEventListener('change', function(event) {
+    if (event.target.type == 'checkbox') {
+        const checkbox = event.target;
+        const tr = checkbox.closest('tr');
+
+        const orderId = tr.children[1].innerText;
+        const orderDate = tr.children[2].innerText;
+        const orderMenu = tr.children[3].innerHTML;
+        const note = tr.children[4].innerText;
+        const status = tr.querySelector('.status_selected').value;
+
+        const delete_data = {
+            order_id: orderId,
+            order_date: orderDate,
+            order_note: note,
+            order_menu: orderMenu,
+            status: status
+        };
+
+        if (checkbox.checked) {
+            selected_delete.push(delete_data);
+        } else {
+            selected_delete = selected_delete.filter(order => order.order_id !== orderId);
+        }
+    }
+});
+
+document.getElementById('delete_order_button').addEventListener('click', async function () {
+    if (selected_delete.length === 0) {
+        alert("Bạn chưa chọn đơn hàng nào để xóa.");
+        return;
+    }
+
+    const confirmed = confirm("Bạn có chắc chắn muốn xóa các đơn hàng đã chọn?");
+    if (!confirmed) return;
+
+    const res = await fetch('/dashboard/orders/delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify([{ delete_data: selected_delete }])
+    });
+
+    const result = await res.json();
+    alert("Đã xóa!");
+
+    // Xoá dòng trong giao diện
+    selected_delete.forEach(item => {
+        const rows = document.querySelectorAll('#order-table-body tr');
+        rows.forEach(row => {
+            if (row.children[1] && row.children[1].innerText === item.order_id) {
+                row.remove();
+            }
+        });
+    });
+
+    selected_delete = [];
+});
