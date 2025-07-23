@@ -438,3 +438,27 @@ document.getElementById('edit_order_button').addEventListener('click', async fun
     // ✅ Cập nhật tổng tiền
     updateTotal();
 });
+
+
+
+//================================= Doanh thu =================================
+
+//1. click vào doanh thu thì hiện lên các feature
+document.getElementById('revenue-content').addEventListener('click', async function(){
+//gửi và lấy data từ tab đơn hàng
+    const res= await fetch('dashboard/revenue', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }, 
+        body: json.stringify([])
+    })
+
+    const data= res.json()
+
+
+
+//1.2. Bảng doanh thu tính thu 
+//-----ngày/tháng/năm-----doanh thu-----
+
+})

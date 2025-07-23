@@ -1,62 +1,30 @@
 [
   {
-    "order_id": "20250722-LeHVS",
-    "order_date": "2025-07-22",
-    "order_note": "Không đường",
+    "order_id": "20250723-ioXof",
+    "order_date": "",
+    "order_note": "123",
     "order_menu": [
       {
         "order_name": "Trà đào",
-        "order_quantity": 6,
+        "order_quantity": 3,
         "price": "25000"
-      },
-      {
-        "order_name": "Trà sữa trân châu",
-        "order_quantity": 2,
-        "price": "30000"
       }
     ]
   },
   {
-    "order_id": "20250722-LeHVS",
-    "order_date": "2025-07-22",
-    "order_note": "Không đường",
+    "order_id": "20250723-nowan",
+    "order_date": "2025-07-23",
+    "order_note": "123",
     "order_menu": [
       {
         "order_name": "Trà đào",
-        "order_quantity": 7,
+        "order_quantity": 3,
         "price": 25000
-      },
-      {
-        "order_name": "Trà sữa trân châu",
-        "order_quantity": 2,
-        "price": 30000
       },
       {
         "order_name": "Latte đá",
-        "order_quantity": 1,
-        "price": "28000"
-      }
-    ]
-  },
-  {
-    "order_id": "20250722-LeHVS",
-    "order_date": "2025-07-22",
-    "order_note": "Không đường",
-    "order_menu": [
-      {
-        "order_name": "Trà đào",
-        "order_quantity": 6,
-        "price": 25000
-      },
-      {
-        "order_name": "Trà sữa trân châu",
         "order_quantity": 2,
-        "price": 30000
-      },
-      {
-        "order_name": "Nước cam ép",
-        "order_quantity": 1,
-        "price": "27000"
+        "price": "28000"
       }
     ]
   }
