@@ -1,6 +1,3 @@
-from crypt import methods
-from nt import mkdir
-from turtle import pos
 from flask import Flask, jsonify, render_template, request
 import os, json
 
@@ -115,28 +112,27 @@ def deleteRow():
 
 
 #============= Revenue =============
-# @app.route('dashboard/revenue', methods=['GET', 'POST'])
+# Trả về data đơn hàng 
+@app.route('/dashboard/revenue', methods=['GET', 'POST'])
+def revenue():
+    #Trả về data 
+    file_path= 'static/data/order.json'
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
+    try: 
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data= json.load(f)
+            if not isinstance(data, list):
+                data= []
+    except (json.JSONDecodeError, ValueError):
+        data= []
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii= False)
+    # Nếu là POST: xử lý dữ liệu gửi từ client
+    if request.method == 'POST':
+        incoming = request.get_json()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -444,14 +444,15 @@ document.getElementById('edit_order_button').addEventListener('click', async fun
 //================================= Doanh thu =================================
 
 //1. click vào doanh thu thì hiện lên các feature
-document.getElementById('revenue-content').addEventListener('click', async function(){
+document.getElementById('revenue-tab').addEventListener('click', async function(event){
 //gửi và lấy data từ tab đơn hàng
-    const res= await fetch('dashboard/revenue', {
+    event.preventDefault();
+    const res= await fetch('/dashboard/revenue', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         }, 
-        body: json.stringify([])
+        body: JSON.stringify([])
     })
 
     const data= res.json()
@@ -460,5 +461,6 @@ document.getElementById('revenue-content').addEventListener('click', async funct
 
 //1.2. Bảng doanh thu tính thu 
 //-----ngày/tháng/năm-----doanh thu-----
+
 
 })
