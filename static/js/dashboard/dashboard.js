@@ -455,12 +455,55 @@ document.getElementById('revenue-tab').addEventListener('click', async function(
         body: JSON.stringify([])
     })
 
-    const data= res.json()
+    const revenue = await res.json()
+    const data= revenue[0]
 
+    // Làm sạch bảng cũ nếu có 
+    const tableBody= document.getElementById('revenue-table-body')
+    tableBody.innerHTML= ''
 
+    // Tạo dòng cho từng ngày 
+    for (const date in data) {
+        const row= document.createElement('tr')
+        row.innerHTML = `
+            <td>${date}</td>
+            <td>${Number(data[date]).toLocaleString()}đ</td>
+        `
+        tableBody.appendChild(row);
+    }
+    changeTab('revenue');
+})
 
-//1.2. Bảng doanh thu tính thu 
-//-----ngày/tháng/năm-----doanh thu-----
+// Xử lí nút tìm kiếm
+document.getElementById('revenue-search-btn').addEventListener('click', async function () {
+    const dateSelected= document.getElementById('revenue-date-filter').value
+    const res= await fetch('/dashboard/revenue', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify([])
+    })
 
+    const revenue = await res.json()
+    const data= revenue[0]
+
+    // làm sạch bảng cũ 
+    const tableBody = document.getElementById('revenue-table-body')
+    tableBody.innerHTML=''
+
+    // add bảng mới 
+    for (const date in data) {
+        // Nếu không chọn ngày, hoặc ngày trống, thì hiện toàn bộ
+        if (!dateSelected || date === dateSelected || date === '') {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${date || 'Không rõ ngày'}</td>
+                <td>${Number(data[date]).toLocaleString()}đ</td>
+            `;
+            tableBody.appendChild(row);
+        }
+    }
+    changeTab('revenue');
 
 })

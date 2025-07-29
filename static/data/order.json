@@ -1,7 +1,7 @@
 [
   {
     "order_id": "20250723-ioXof",
-    "order_date": "",
+    "order_date": "2025-07-23",
     "order_note": "123",
     "order_menu": [
       {
@@ -9,7 +9,8 @@
         "order_quantity": 3,
         "price": "25000"
       }
-    ]
+    ],
+    "status": "finish"
   },
   {
     "order_id": "20250723-nowan",
@@ -26,6 +27,56 @@
         "order_quantity": 2,
         "price": "28000"
       }
-    ]
+    ],
+    "status": "finish"
+  },
+  {
+    "order_id": "20250729-UjVDf",
+    "order_date": "2025-07-29",
+    "order_note": "21321",
+    "order_menu": [
+      {
+        "order_name": "Cà phê sữa",
+        "order_quantity": 4,
+        "price": "20000"
+      }
+    ],
+    "status": "finish"
+  },
+  {
+    "order_id": "20250729-XMLNB",
+    "order_date": "2025-07-29",
+    "order_note": "123",
+    "order_menu": [
+      {
+        "order_name": "Cà phê sữa",
+        "order_quantity": 4,
+        "price": "20000"
+      },
+      {
+        "order_name": "Trà sữa trân châu",
+        "order_quantity": 3,
+        "price": "30000"
+      }
+    ],
+    "status": "finish"
+  },
+  {
+    "order_id": "20250729-MSQjG",
+    "order_date": "2025-07-27",
+    "order_note": "2323",
+    "order_menu": [
+      {
+        "order_name": "Cà phê sữa",
+        "order_quantity": 3,
+        "price": "20000"
+      },
+      {
+        "order_name": "Latte đá",
+        "order_quantity": 3,
+        "price": "28000"
+      }
+    ],
+    "status": "finish"
   }
 ]

@@ -205,6 +205,7 @@
     <a id="menu-tab" href="#" class="active" onclick="changeTab('menu')">Menu</a>
     <a id="orders-tab" href="#">Đơn hàng</a>
     <a id="revenue-tab" href="#" onclick="changeTab('revenue')">Doanh thu</a>
+    <a id="report-tab" href="#" onclick="changeTab('report')">Báo cáo</a>
   </div>
 
   <div class="main">
@@ -215,39 +216,44 @@
       <div id="menu-content" class="tab-content active">
         <h3>Menu Đồ Uống</h3>
 
-        <div style="display: flex; gap: 60px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 30px; flex-wrap: wrap;">
           <div class="menu-item">
+            <img src="/static/images/tra-dao.jpg" alt="Trà đào" style="width: 120px; height: 160px; object-fit: cover; border-radius: 8px;" />
             <p class="item-name"><strong>Trà đào</strong></p>
             <p class="item-price">25.000đ</p>
           </div>
 
           <div class="menu-item">
+            <img src="/static/images/ca-phe-sua.jpeg" alt="Cà phê sữa" style="width: 120px; height: 160px; object-fit: cover; border-radius: 8px;" />
             <p class="item-name"><strong>Cà phê sữa</strong></p>
             <p class="item-price">20.000đ</p>
           </div>
 
           <div class="menu-item">
+            <img src="/static/images/tra-sua-tran-chau.jpg" alt="Trà sữa trân châu" style="width: 120px; height: 160px; object-fit: cover; border-radius: 8px;" />
             <p class="item-name"><strong>Trà sữa trân châu</strong></p>
             <p class="item-price">30.000đ</p>
           </div>
 
           <div class="menu-item">
+            <img src="/static/images/latte-da.jpg" alt="Latte đá" style="width: 120px; height: 160px; object-fit: cover; border-radius: 8px;" />
             <p class="item-name"><strong>Latte đá</strong></p>
             <p class="item-price">28.000đ</p>
           </div>
 
           <div class="menu-item">
+            <img src="/static/images/sinh-to-bo.jpg" alt="Sinh tố bơ" style="width: 120px; height: 160px; object-fit: cover; border-radius: 8px;" />
             <p class="item-name"><strong>Sinh tố bơ</strong></p>
             <p class="item-price">32.000đ</p>
           </div>
 
           <div class="menu-item">
+            <img src="/static/images/nuoc-ep-cam.jpg" alt="Nước cam ép" style="width: 120px; height: 160px; object-fit: cover; border-radius: 8px;" />
             <p class="item-name"><strong>Nước cam ép</strong></p>
             <p class="item-price">27.000đ</p>
           </div>
         </div>
       </div>
-
 
 
       <!-- Đơn hàng -->
@@ -331,6 +337,39 @@
       <!-- Doanh thu -->
       <div id="revenue-content" class="tab-content">
         <h3>Doanh thu</h3>
+        <!-- Bộ lọc ngày + nút tìm -->
+        <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+          <label for="revenue-date-filter"><strong>Chọn ngày:</strong></label>
+          <input type="date" id="revenue-date-filter" />
+
+          <button id="revenue-search-btn">🔍 Tìm kiếm</button>
+        </div>
+
+        <table border="1" width="100%" cellspacing="0" cellpadding="8">
+          <thead style="background-color: #2980b9; color: white;">
+            <tr>
+              <th>Ngày</th>
+              <th>Doanh thu</th>
+            </tr>
+          </thead>
+          <tbody id="revenue-table-body">
+            <!-- JS sẽ render dữ liệu ở đây -->
+          </tbody>
+        </table>
+
+      <!-- Báo cáo -->
+      <div id="report-content" class="tab-content">
+        <h3>Báo cáo</h3>
+
+        <p>Chức năng báo cáo sẽ hiển thị thống kê, tổng hợp hoặc biểu đồ về đơn hàng, doanh thu, sản phẩm bán chạy...</p>
+
+        <div style="margin-top: 20px;">
+          <button onclick="alert('Xuất báo cáo PDF đang được phát triển...')">📄 Xuất PDF</button>
+          <button onclick="alert('Biểu đồ doanh thu đang được phát triển...')">📊 Xem biểu đồ</button>
+          <button onclick="alert('Thống kê sản phẩm đang được phát triển...')">📈 Sản phẩm bán chạy</button>
+        </div>
+      </div>
+
       </div>
     </div>
   </div>

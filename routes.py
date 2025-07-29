@@ -128,11 +128,27 @@ def revenue():
         data= []
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii= False)
+    
     # Nếu là POST: xử lý dữ liệu gửi từ client
     if request.method == 'POST':
         incoming = request.get_json()
+    
+    # Lọc các data, tạo thành list có dạng 
+    # revenue = [{date:revenue}]
+    revenue = []
+    dict_revenue= {}
+    for order in data:
+        order_date= order['order_date']
+        if order_date not in dict_revenue:
+            dict_revenue[order_date] = 0
+        for item in order['order_menu']:
+            price= int(item['price'])
+            quantity= int(item['order_quantity'])
+            dict_revenue[order_date] += price * quantity
 
-    return jsonify(data)
+    revenue.append(dict_revenue)
+
+    return jsonify(revenue)
 
 if __name__ == '__main__':
     app.run(debug=True)
