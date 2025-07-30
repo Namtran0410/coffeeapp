@@ -333,16 +333,22 @@
         </div>
       </div>
 
-
       <!-- Doanh thu -->
       <div id="revenue-content" class="tab-content">
         <h3>Doanh thu</h3>
-        <!-- Bộ lọc ngày + nút tìm -->
+
+        <!-- Bộ lọc theo ngày -->
         <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
           <label for="revenue-date-filter"><strong>Chọn ngày:</strong></label>
           <input type="date" id="revenue-date-filter" />
+          <button id="revenue-search-by-date-btn">🔍 Tìm theo ngày</button>
+        </div>
 
-          <button id="revenue-search-btn">🔍 Tìm kiếm</button>
+        <!-- Bộ lọc theo tháng -->
+        <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+          <label for="revenue-month-filter"><strong>Chọn tháng:</strong></label>
+          <input type="month" id="revenue-month-filter" />
+          <button id="revenue-search-by-month-btn">🔍 Tìm theo tháng</button>
         </div>
 
         <table border="1" width="100%" cellspacing="0" cellpadding="8">
@@ -356,6 +362,9 @@
             <!-- JS sẽ render dữ liệu ở đây -->
           </tbody>
         </table>
+      </div>
+
+
 
       <!-- Báo cáo -->
       <div id="report-content" class="tab-content">
@@ -370,7 +379,6 @@
         </div>
       </div>
 
-      </div>
     </div>
   </div>
 

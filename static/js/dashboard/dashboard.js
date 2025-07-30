@@ -461,6 +461,7 @@ document.getElementById('revenue-tab').addEventListener('click', async function(
     // Làm sạch bảng cũ nếu có 
     const tableBody= document.getElementById('revenue-table-body')
     tableBody.innerHTML= ''
+    let total = 0;
 
     // Tạo dòng cho từng ngày 
     for (const date in data) {
@@ -470,12 +471,21 @@ document.getElementById('revenue-tab').addEventListener('click', async function(
             <td>${Number(data[date]).toLocaleString()}đ</td>
         `
         tableBody.appendChild(row);
+        total+= data[date]
     }
+
+    // Thêm tổng tiền 
+    const totalRow= document.createElement('tr')
+    totalRow.innerHTML = `
+        <td><strong>Tổng cộng</strong></td>
+        <td><strong>${total.toLocaleString()}đ</strong></td>
+    `
+    tableBody.appendChild(totalRow);
     changeTab('revenue');
 })
 
 // Xử lí nút tìm kiếm
-document.getElementById('revenue-search-btn').addEventListener('click', async function () {
+document.getElementById('revenue-search-by-date-btn').addEventListener('click', async function () {
     const dateSelected= document.getElementById('revenue-date-filter').value
     const res= await fetch('/dashboard/revenue', {
         method: 'POST',
@@ -487,7 +497,7 @@ document.getElementById('revenue-search-btn').addEventListener('click', async fu
 
     const revenue = await res.json()
     const data= revenue[0]
-
+    let total = 0;
     // làm sạch bảng cũ 
     const tableBody = document.getElementById('revenue-table-body')
     tableBody.innerHTML=''
@@ -501,9 +511,71 @@ document.getElementById('revenue-search-btn').addEventListener('click', async fu
                 <td>${date || 'Không rõ ngày'}</td>
                 <td>${Number(data[date]).toLocaleString()}đ</td>
             `;
+            total+= data[date]
             tableBody.appendChild(row);
         }
+
     }
     changeTab('revenue');
+    // Thêm tổng tiền 
+    const totalRow= document.createElement('tr')
+    totalRow.innerHTML = `
+        <td><strong>Tổng cộng</strong></td>
+        <td><strong>${total.toLocaleString()}đ</strong></td>
+    `
+    tableBody.appendChild(totalRow);
+})
+
+function getMonthName(monthNumberStr) {
+  const monthIndex = parseInt(monthNumberStr, 10) - 1;
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  return months[monthIndex] || "Invalid month";
+}
+
+// Lọc theo tháng
+document.getElementById('revenue-search-by-month-btn').addEventListener('click', async function () {
+    const monthValue= document.getElementById('revenue-month-filter').value
+    const tableBody = document.getElementById('revenue-table-body');
+    tableBody.innerHTML = '';
+
+    // lấy data 
+    let total = 0;
+    const res= await fetch('/dashboard/revenue', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify([])
+    })
+    const revenue = await res.json();
+    const data = revenue[0];
+    tableBody.innerHTML = '';
+    console.log("monthValue là:", monthValue);
+    for (const date in data) {
+        const new_date = date.split('-');  // ["2025", "07", "23"]
+        const update_date = `${new_date[0]}-${new_date[1]}`;  // "2025-07"
+        if (!monthValue || update_date === monthValue || monthValue === '') {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+            <td>${date || 'Không rõ ngày'}</td>
+            <td>${Number(data[date]).toLocaleString()}đ</td>
+            `;
+            total += data[date]
+            tableBody.appendChild(row);
+
+        }
+
+    }
+    // Thêm tổng tiền 
+    const totalRow= document.createElement('tr')
+    totalRow.innerHTML = `
+        <td><strong>Tổng cộng</strong></td>
+        <td><strong>${total.toLocaleString()}đ</strong></td>
+    `
+    tableBody.appendChild(totalRow);
+
 
 })

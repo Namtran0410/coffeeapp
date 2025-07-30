@@ -78,5 +78,46 @@
       }
     ],
     "status": "finish"
+  },
+  {
+    "order_id": "20250730-aa00y",
+    "order_date": "2025-08-01",
+    "order_note": "ád",
+    "order_menu": [
+      {
+        "order_name": "Trà sữa trân châu",
+        "order_quantity": 5,
+        "price": "30000"
+      },
+      {
+        "order_name": "Sinh tố bơ",
+        "order_quantity": 4,
+        "price": "32000"
+      }
+    ],
+    "status": "finish"
+  },
+  {
+    "order_id": "20250730-xi574",
+    "order_date": "2025-06-30",
+    "order_note": "Cà phê sữa: ít sữa/ trà sữa 30% đá/ cam ép ít đường",
+    "order_menu": [
+      {
+        "order_name": "Cà phê sữa",
+        "order_quantity": 1,
+        "price": "20000"
+      },
+      {
+        "order_name": "Trà sữa trân châu",
+        "order_quantity": 3,
+        "price": "30000"
+      },
+      {
+        "order_name": "Nước cam ép",
+        "order_quantity": 3,
+        "price": "27000"
+      }
+    ],
+    "status": "finish"
   }
 ]
